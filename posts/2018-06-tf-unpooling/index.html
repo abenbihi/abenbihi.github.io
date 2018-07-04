@@ -12,16 +12,11 @@
 <body id="index" class="home">
   <header id="banner" class="body">
     <h1><a href="/">Ben's Blog </a></h1>
-    <nav><ul>
-        <li class="active"><a href="/category/posts.html">posts</a></li>
-      </ul></nav>
   </header><!-- /#banner -->
   <section id="content" class="body">
     <article>
       <header>
-        <h1 class="entry-title">
-          <a href="/tf_unpooling.html" rel="bookmark"
-                                       title="Permalink to Tensorflow unpooling">Tensorflow unpooling</a></h1>
+        <h1 class="entry-title">Unpooling with Tensorflow</h1>
       </header>
 
       <div class="entry-content">
@@ -29,12 +24,7 @@
           <abbr class="published" title="2018-06-28T20:00:00+02:00">
             Published: jeu. 28 juin 2018
           </abbr>
-
-          <address class="vcard author">
-            By                         <a class="url fn" href="/author/assia-benbihi.html">Assia Benbihi</a>
-          </address>
-          <p>In <a href="/category/posts.html">posts</a>.</p>
-          <p>tags: <a href="/tag/tensorflow-unpooling-max_grad_pool.html">tensorflow unpooling max_grad_pool</a> </p>
+          <p>tags: TensorFlow unpooling grad_max_pool</p>
         </footer><!-- /.post-info -->      <style type="text/css">/*!
 *
 * IPython notebook
@@ -1011,10 +1001,11 @@ h6:hover .anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Unpooling-with-Tensorflow">Unpooling with Tensorflow<a class="anchor-link" href="#Unpooling-with-Tensorflow">¶</a></h1><p>This post explains how to code an 'differentiable' unpooling layer with Tensorflow. It is tested up to Tensorflow 1.4 but should be compatible with later versions as it relies on low level API.</p>
+
+<p>This post explains how to code an 'differentiable' unpooling layer with Tensorflow. It is tested up to Tensorflow 1.4 but should be compatible with later versions as it relies on low level API.</p>
 <h3 id="Definition">Definition<a class="anchor-link" href="#Definition">¶</a></h3><p>There are many 'definitions' or confusion about unpooling. Sometimes it is confused with strided convolution, transpose convolution (abusively called deconvolution) or interpolation. 
 I use the definition of unpooling as stated by M.D. Zeiler in <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.849.3679&amp;rep=rep1&amp;type=pdf">Adaptive Deconvolutional Networks for Mid and High Level Feature Learning</a>. It was then taken as the norm for unpooling in other papers. This paper aims at generating features from trained CNN by inverting the feature maps back to image space. People interested in this subject may refer to the paper for in depth explanation but the main idea is to invert ReLU with ReLU, convolution with transpose convolution and pooling with unpooling. Roughly speaking, pooling consists in taking local maxima on a map and discarding the rest. Unpooling puts back these maxima into their map location and set the rest to 0.</p>
-<p><img alt="unpooling.png" src="attachment:unpooling.png"/></p>
+<p><img alt="unpooling.png" src="img/unpooling.png"/></p>
 <p>This figure shows the pooling operation with a kernel of size 2 and a stride of 2. A kernel of 2 means that you look for the local maxima on a block of 2x2. A stride of 2 means that you take a block every 2 blocks.</p>
 <h3 id="Implementation">Implementation<a class="anchor-link" href="#Implementation">¶</a></h3><p>You can find ready to run examples <a href="https://github.com/assiaben/w/tree/master/unpooling">here</a>.</p>
 <h4 id="Code-details">Code details<a class="anchor-link" href="#Code-details">¶</a></h4><p>This code is tested up to Tensorflow 1.4. Let me know if you have issues with more recent versions.</p>
@@ -1099,9 +1090,9 @@ I use the definition of unpooling as stated by M.D. Zeiler in <a href="http://c
 <li><a href="https://github.com/assiaben/w/blob/master/unpooling/grad_test.py">grad_test.py</a>: simulate a supervised training to show that the gradient flows through the unpooling layer</li>
 </ol>
 <h4 id="1.-unpool_test.py">1. unpool_test.py<a class="anchor-link" href="#1.-unpool_test.py">¶</a></h4><p>The next figure shows the input and output of the pool/unpool. The code is straighforward.
-<img alt="1_unpool_test.png" src="attachment:1_unpool_test.png"/></p>
+<img alt="1_unpool_test.png" src="img/unpool_test.png"/></p>
 <h4 id="2.-grad_test.py">2. grad_test.py<a class="anchor-link" href="#2.-grad_test.py">¶</a></h4><p>I check the gradient histogram at each training step and observe that it is not 0 for all the layers with unpooling. The next figure shows the gradient of the weights on the 6th layer and the gradient of the bias of the 5th layer. You can check all the gradient histograms by running tensorboard on the checkpoint in <a href="https://github.com/assiaben/w/tree/master/unpooling/log">this directory</a></p>
-<p><img alt="1_grad_test.png" src="attachment:1_grad_test.png"/></p>
+<p><img alt="1_grad_test.png" src="img/grad_test.png"/></p>
 </div>
 </div>
 </div>
