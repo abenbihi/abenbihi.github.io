@@ -12,7 +12,11 @@
           crossorigin="anonymous">
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> 
+    
+    <link rel="stylesheet"
+      href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
 
+    
     <style>
 @import url(https://fonts.googleapis.com/css?family=Raleway:400,700);
 body, input, select, textarea {font-family: "Raleway", Arial, Helvetica, sans-serif; font-size: 12pt; font-weight: 400; line-height: 1.6em;}
@@ -20,7 +24,8 @@ a			{color: #4285F4}
 nav a             {color: white}
 nav a:hover       {color: white}
 h4                {color: #1a60a2}
-strong	        {color: #DB4437; font-weight:400}
+h5                {color: #1a60a2}
+strong	        {color: #1a60a2; font-weight:400}
 ol.pubs		{list-style-type: decimal; padding-left: 2em}
 ul.pub		{list-style:none; margin-bottom:1em}
 ul.pub		{list-style:none; margin-bottom:1em}
@@ -36,11 +41,15 @@ ul.pub li.venue a {text-decoration: none}
   </head>
 
 <!--h4                {color: #1aa260}-->
+<!-- 
+  a: header links
+
+  #DB4437: red
+  #1a60a2: dark blue
+  #4285F4: ligh blue
+-->
 
   <body id="index" class="home">
-    <!--<header id="banner" class="body">
-      <h1><a href="/">Assia Benbihi </a></h1>
-      </header>-->
       <nav class="nav justify-content-center sticky-top" style="background:#4285F4;color:white">
         <a class="nav-link" href="#bio">Bio</a>
         <a class="nav-link" href="#publications">Publications</a>
@@ -48,80 +57,52 @@ ul.pub li.venue a {text-decoration: none}
         <a class="nav-link" href="#posts">Posts</a>
       </nav>
 
-      <!--<div class="author__urls-flat social-icons text-center">
-        <a href="mailto:paul.edouard.sarlin@gmail.com">
-          <meta itemprop="email" content="paul.edouard.sarlin@gmail.com">
-          <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
-        </a>
-        &nbsp;|
-        <a href="https://psarlin.com/doc/resume.pdf">
-          <i class="fa fa-fw fa-file-text" aria-hidden="true"></i> Résumé
-        </a>
-        &nbsp;|
-        <a href="https://www.linkedin.com/in/pesarlin/en" itemprop="sameAs">
-          <i class="fa fa-fw fa-linkedin-square" aria-hidden="true"></i> LinkedIn
-        </a>
-        &nbsp;|
-        <a href="https://github.com/skydes" itemprop="sameAs">
-          <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
-        </a>
-        &nbsp;|
-        <a href="https://twitter.com/pesarlin" itemprop="sameAs">
-          <i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter
-        </a>
-      </div>-->
-    
-
       <div class="container">
         <div class="row">
           <div class="col">
-            <div class="card-body">
-              <a name="contact"></a>
-              <h3
-                 class="card-title"><a href="https://dreamlab.georgiatech-metz.fr/people/">Assia
-                   Benbihi</a></h3>
-              <h6 class="card-subtitle mb-2 text-muted"> PhD student in problem solving with Computer Vision and ML</h6>
-              <!--<h6 class="card-subtitle mb-2 text-muted"> Supelec-GeorgiaTech Lorraine </h6>-->
-              <!--<p class="card-text">-->
-              <!--<div>
-                <h6>
-                  <a href="#">abenbihi@georgiatech-metz.fr</a>  -  
-                  <a href="https://scholar.google.fr/citations?user=0XFEGeoAAAAJ&hl=en">Google Scholar</a>  -  
-                  <a href="https://github.com/abenbihi">Github</a>  -  
-                  <a href="https://www.linkedin.com/in/assia-benbihi-56ab7894/">LinkedIn</a>  -  
-                  <a href="https://twitter.com/_abenbihi">Twitter</a>
+            <div class="media">
+              <img src="img/me.jpg" class="mr-1 mt-3 rounded-circle" />
+              <div class="card-body">
+                <a name="contact"></a>
+                <h3
+                   class="card-title"><a href="https://dreamlab.georgiatech-metz.fr/people/">Assia
+                     Benbihi</a></h3>
+                <h6 class="card-subtitle mb-2 text-muted"> 
+                  PhD student in problem solving with Computer Vision and ML
                 </h6>
-              </div>-->
 
-              
-              <div class="author__urls-flat social-icons text-center">
-                <a href="mailto:paul.edouard.sarlin@gmail.com">
-                  <meta itemprop="email" content="paul.edouard.sarlin@gmail.com">
-                  <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
-                </a>
-                &nbsp;|
-                <a href="https://psarlin.com/doc/resume.pdf">
-                  <i class="fa fa-fw fa-file-text" aria-hidden="true"></i> Résumé
-                </a>
-                &nbsp;|
-                <a href="https://www.linkedin.com/in/pesarlin/en" itemprop="sameAs">
-                  <i class="fa fa-fw fa-linkedin-square" aria-hidden="true"></i> LinkedIn
-                </a>
-                &nbsp;|
-                <a href="https://github.com/skydes" itemprop="sameAs">
-                  <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
-                </a>
-                &nbsp;|
-                <a href="https://twitter.com/pesarlin" itemprop="sameAs">
-                  <i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter
-                </a>
+                <div class="author__urls-flat social-icons text-left">
+                  <a href="mailto:abenbihi@georgiatech-metz.fr">
+                    <meta itemprop="email" content="abenbihi@georgiatech-metz.fr">
+                    <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+                  </a>
+                  &nbsp; - 
+                  <a href="https://scholar.google.fr/citations?user=0XFEGeoAAAAJ&hl=en" itemprop="sameAs">
+                    <i class="ai ai-google-scholar-square ai-1x" aria-hidden="true"></i> Scholar
+                  </a>
+                  &nbsp; - 
+                  <a href="https://github.com/abenbihi" itemprop="sameAs">
+                    <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+                  </a>
+                  &nbsp; - 
+                  <a href="resume.pdf">
+                    <i class="fa fa-fw fa-file-text" aria-hidden="true"></i> Résumé
+                  </a>
+                  &nbsp; - 
+                  <a href="https://www.linkedin.com/in/assia-benbihi-56ab7894/" itemprop="sameAs">
+                    <i class="fa fa-fw fa-linkedin-square" aria-hidden="true"></i> LinkedIn
+                  </a>
+                  &nbsp; -  
+                  <a href="https://twitter.com/_abenbihi" itemprop="sameAs">
+                    <i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter
+                  </a>
+                </div>
               </div>
-
-
             </div>
           </div>
         </div>
       </div>
+
 
       <!--me-->
       <div class="container">
@@ -132,12 +113,14 @@ ul.pub li.venue a {text-decoration: none}
                 <a name="bio"></a>
                 <h4 class="mt.o">Bio</h4>
                 <p>
-                I am a 3rd-year PhD student at the
-                <a href="http://dream.georgiatech-metz.fr/">DREAM Lab</a> where I bend
-                stubborn computers to my will to solve any problem I find
-                exciting.  Currently, these problems regard computer vision and
-                machine learning. I also develop automatic electronic inspection
-                software for industry.
+                I am a 3rd-year PhD student at the <a
+                 href="http://dream.georgiatech-metz.fr/">DREAM Lab</a>, under
+                the supervision of Cédric Pradalier and Matthieu Geist, where I
+                bend stubborn computers to my will to solve any exciting problems.
+                Currently, these problems regard computer vision and
+                machine learning. I also develop automatic visual
+                inspection software for electronic industry.
+
               <h5>I am looking for a postdoc or other positions
                 that involve research, ML and software.</h5>
               </p>
@@ -157,47 +140,44 @@ ul.pub li.venue a {text-decoration: none}
               <h4 class="mt.o">Publications</h4>
               <ul>
                 <li> <ul class="pub">
-                    <li class="title">wasabi </li>
-                    <li class="authors"> Assia Benbihi, Stephanie Arravechia, Matthieu Geist, Cedric Pradalier</li>
+                    <li class="title">Image-Based Place Recognition on Bucolic Environment Across Seasons From Semantic Edge Description</li>
+                    <li class="authors"> Assia Benbihi, Stephanie Arravechia, Matthieu Geist, Cédric Pradalier</li>
                     <li class="venue"> Preprint 2019</li>
                   </ul>
                 </li>
                 
                 <li> <ul class="pub">
-                    <li class="title">ELF </li>
-                    <li class="authors"> Assia Benbihi, Matthieu Geist, Cedric Pradalier</li>
-                    <li class="venue"> International Conference on Computer Vision 2019</li>
+                    <li class="title"><a href="https://arxiv.org/pdf/1907.03261.pdf"/>ELF: Embedded Localisation of Features in pre-trained CNN</a></li>
+                    <li class="authors">Assia Benbihi, Matthieu Geist, Cédric Pradalier</li>
+                    <li class="venue">International Conference on Computer Vision 2019</li>
                   </ul>
                 </li>
 
                 <li> <ul class="pub">
-                    <li class="title">SENN </li>
-                    <li class="authors"> Xiaolong Wu, Assia Benbihi, Matthieu Geist, Cedric Pradalier</li>
+                    <li class="title"><a href="https://arxiv.org/pdf/1904.00738.pdf"/>Semantic Nearest Neighbor Fields Monocular Edge Visual-Odometry</a></li>
+                    <li class="authors"> Xiaolong Wu, Assia Benbihi, Matthieu Geist, Cédric Pradalier</li>
                     <li class="venue"> Preprint 2019</li>
                   </ul>
                 </li>
                   
                 <li> <ul class="pub">
-                    <li class="title">ICONIP </li>
-                    <li class="authors">Assia Benbihi, Matthieu Geist, Cedric Pradalier</li>
-                    <li class="venue"> International Conference on Image Neural
-                      Processing 2019</li>
+                    <li class="title"><a href="https://arxiv.org/pdf/1805.04141.pdf">Semi-Supervised Domain Adaptation with Representation Learning for Semantic Segmentation across Time</a></li>
+                    <li class="authors">Assia Benbihi, Matthieu Geist, Cédric Pradalier</li>
+                    <li class="venue"> International Conference on Image Neural Processing 2019</li>
                   </ul>
                 </li>
 
                 <li> <ul class="pub">
-                    <li class="title">drones </li>
-                    <li class="authors"> Assia Benbihi, Matthieu Geist, Cedric Pradalier</li>
-                    <li class="venue"> (International Conference on Computer TODO
-                    2019)</li>
+                    <li class="title"><a href="https://arxiv.org/pdf/1909.01636">Learning Sensor Placement from Demonstration for UAV networks</a></li>
+                    <li class="authors"> Assia Benbihi, Matthieu Geist, Cédric Pradalier</li>
+                    <li class="venue">IEEE Symposium on Computers and Communications 2019</li>
                   </ul>
                 </li>
 
                 <li> <ul class="pub">
-                    <li class="title">Agro </li>
-                    <li class="authors"> Antoine Richard, Assia Benbihi, Matthieu Geist, Cedric Pradalier</li>
-                    <li class="venue"> (International Conference on Computer TODO
-                    2019)</li>
+                    <li class="title"><a href="http://dream.georgiatech-metz.fr/sites/default/files/ICPA_Pradalier_Automated%20segmentation%20and%20classification%20of%20land%20use%20from%20overhead%20imagery.pdf">Automated segmentation and classification of land use from overhead imagery></a></li>
+                    <li class="authors"> Antoine Richard, Assia Benbihi, Matthieu Geist, Cédric Pradalier, Vincent Perez, P Durand, R Van Couwenberghe</li>
+                    <li class="venue">International Conference on Precision Agriculture, 2018</li>
                   </ul>
                 </li>
 
