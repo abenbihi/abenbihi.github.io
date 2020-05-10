@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
+        <title>Box Matching</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="Description" content="Assia Benbihi, personal website">
+       
+        <link rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous">
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> 
+
+        <link rel="stylesheet"
+              href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
+
+        <style>
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,700);
+body, input, select, textarea {font-family: "Raleway", Arial, Helvetica, sans-serif; font-size: 12pt; font-weight: 400; line-height: 1.6em;}
+a			{color: #4285F4}
+nav a             {color: white}
+nav a:hover       {color: white}
+h4                {color: #1a60a2}
+h5                {color: #1a60a2}
+strong	        {color: #1a60a2; font-weight:400}
+ol.pubs		{list-style-type: decimal; padding-left: 2em}
+ul.pub		{list-style:none; margin-bottom:1em}
+ul.pub		{list-style:none; margin-bottom:1em}
+ul.pub li.title	{color: #333333}
+ul.pub li.authors {color: #555555}
+ul.pub li.venue	{font-style: italic}
+ul.pub li.venue a {text-decoration: none}
+.header           {background-color:#DADADA; margin-bottom:5px}
+.card             {border:none}
+.container         {margin-top: 1em}
+:target {display: block; position: relative; top: -120px; visibility: hidden;}
+        </style>
+
+        <meta name="description" content="I match boxes on the sacre coeur." />
+</head>
+
+
+<body id="index" class="home">
+<section id="content" class="body">
+  <article>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="media">
+          <div class="media-body">
+            <center><h1 class="sticky-top" style="color:#4285F4;">
+                Box Matching</h5></center>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="entry-content">
+      <p>Finding local correspondences among cluttered scenes requires identifying the
+image's regions to match. Current approaches based on saliency or semantics
+provide only coarse and few such regions per image. I propose to to identify
+regions to match at a finer levels, for example at the level of an object.
+Matching these finer regions allows computing a coarse image transformation
+later used to constrain the local correspondences. </p>
+<p>Current experiments involve the Phototourism dataset where regions of interest
+are doors, windows, statues ... Manual annotations of such regions are
+collected in the form of semantic boxes. The annotation effort is reduced by
+taking advantage of the dense although incomplete 3d information of the
+dataset. These labels are used to train an existing object detector (Faster
+R-CNN). In parallel, the region matching is developed using the manual
+annotation first. Regions are matched according to their semantics and visual
+similarity in an N-to-N fashion. </p>
+<p align="center">
+<img width="1024" src="/images/box_matching/selected_match.png">
+</p>
+
+<p align="center">
+An example of semantic boxes on the Phototourism dataset and four putative box matches.
+</p>
+
+<h4>Updates:</h4>
+<ul>
+<li>2020-05-10: first commit</li>
+</ul>
+<h4>TODO:</h4>
+<ul>
+<li>Implement the evaluation with the ground-truth boxes on the validation split.</li>
+<li>Manually annotate the boxes.</li>
+<li>Define the box annotation granularity i.e. to which architectural specificity
+  the annotations go down to?</li>
+<li>Refine the putative box matching: currently boxes are matched based on their
+  semantic consistency only which leads to a high number of matches. It is
+  possible to add a visual similarity constraint between boxes with the same
+  label by computing a descriptor over the box and match them only if the
+  descriptor distance is below a threshold. Tune this threshold.</li>
+<li>Localization evaluation.</li>
+</ul>
+<h4>Results</h4>
+<h5>Stereo-matching</h5>
+<p>I measure the accuracy of the camera displacement between image pairs of the
+same scene, as in the
+<a href="thehttps://vision.uvic.ca/image-matching-challenge/">image-matching-challenge</a>.
+Given a set of angular error threshold, I measure the ratio of image pairs for
+which the estimated displacement error falls below each thresholds. The area
+under this curve is called the mean Average Accuracy (mAA). The set of local
+features is fixed (to SIFT) and I compare the mAA between a naive matching and
+a box-constrained matching.</p>
+<p align="center">
+<img width="1024" src="/images/box_matching/stereo_plot.png">
+</p>
+
+<p align="center">
+mAA on the three phototourism validation scenes.
+</p>
+
+<h5>Localization (coming soon)</h5>
+<p>A subset of the images' scene are used as reference images and the rest as
+query images. The reference images are used to build the construct the 3D and
+the queries are registered in the scene.</p>
+<h5>Box detection</h5>
+<p>The performance is measured with the standard detection mAP (numerical results coming
+soon). Meanwhile, here is a image example.</p>
+<p align="center">
+<img width="784" src="/images/box_matching/reichstag_box.jpg">
+</p>
+
+<p align="center">
+Qualitative results on the box detection network. Faster-RCNN with resnet50
+backbone is trained on the reichstag scene. This image only
+illustrates that such training can converge and can not be used to assess the
+detection performance as the training and validation images are the same.
+</p>
+
+<!--#### Setup
+
+#### Dataset
+Annotation progress on the [Phototourism](https://vision.uvic.ca/imw-challenge/index.md) dataset.
+
+| Scene name              | Split | Size  | Annotated  |
+| ----------------------- | :---: | :---: | :--------: |
+| reichstag               | val   | 75    |     x     |   
+| sacre_coeur             | val   | 1179  |     x     |
+| st_peters_square        | val   | 2504  |     x     |
+| brandenburg_gate        | train | 1363  |           |
+| buckingham_palace       | train | 1676  |           |
+| colosseum_exterior      | train | 2063  |           |
+| grand_place_brussels    | train | 1083  |           |
+| hagia_sophia_interior   | train | 889   |           |
+| notre_dame_front_facade | train | 3765  |           |
+| palace_of_westminster   | train | 983   |           |
+| pantheon_exterior       | train | 1401  |           |
+| prague_old_town_square  | train | 2316  |           |
+| taj_mahal               | train | 1312  |           |
+| temple_nara_japan       | train | 904   |           |
+| trevi_fountain          | train | 3191  |           |
+| westminster_abbey       | train | 1061  |           |-->
+    </div><!-- /.entry-content -->
+  </div>
+
+
+  </article>
+</section>
+
+<script type="text/javascript">
+    var disqus_shortname = 'abenbihi-github-io';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+</html>
