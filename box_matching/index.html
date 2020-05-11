@@ -86,27 +86,35 @@ An example of semantic boxes on the Phototourism dataset and four putative box m
 <li>2020-05-10: first commit</li>
 </ul>
 <h4>TODO:</h4>
-<ul>
-<li>Implement the evaluation with the ground-truth boxes on the validation split.</li>
-<li>Manually annotate the boxes.</li>
-<li>Define the box annotation granularity i.e. to which architectural specificity
-  the annotations go down to?</li>
+<ol>
+<li>Speed up the box matching. One way to do so is to reduce the initial set of
+  putative matches or to define a ransac threshold above which the estimated coarse
+  image transformation is satisfying.</li>
 <li>Refine the putative box matching: currently boxes are matched based on their
   semantic consistency only which leads to a high number of matches. It is
   possible to add a visual similarity constraint between boxes with the same
   label by computing a descriptor over the box and match them only if the
   descriptor distance is below a threshold. Tune this threshold.</li>
-<li>Localization evaluation.</li>
-</ul>
+<li>Implement the localization evaluation.</li>
+<li>Define the box annotation granularity i.e. to which architectural specificity
+  the annotations go down to?</li>
+<li>Manually annotate the boxes.</li>
+</ol>
 <h4>Results</h4>
+<p>Experiments aim at showing the benefits of the two-stages matching against a
+naive matching for stereo-matching and localization. Current results are
+computed on the validation set of the phototourism dataset with manual box
+annotations. This will be updated to integrate the trained box detector.</p>
 <h5>Stereo-matching</h5>
-<p>I measure the accuracy of the camera displacement between image pairs of the
+<p>Given a pair of images of the same scenes, the goal is to recover the camera
+displacement.
+I measure the accuracy of the camera displacement between image pairs of the
 same scene, as in the
 <a href="thehttps://vision.uvic.ca/image-matching-challenge/">image-matching-challenge</a>.
 Given a set of angular error threshold, I measure the ratio of image pairs for
 which the estimated displacement error falls below each thresholds. The area
 under this curve is called the mean Average Accuracy (mAA). The set of local
-features is fixed (to SIFT) and I compare the mAA between a naive matching and
+features is fixed (upright-SIFT) and I compare the mAA between a naive matching and
 a box-constrained matching.</p>
 <p align="center">
 <img width="1024" src="/images/box_matching/stereo_plot.png">
@@ -116,13 +124,16 @@ a box-constrained matching.</p>
 mAA on the three phototourism validation scenes.
 </p>
 
-<h5>Localization (coming soon)</h5>
-<p>A subset of the images' scene are used as reference images and the rest as
-query images. The reference images are used to build the construct the 3D and
-the queries are registered in the scene.</p>
+<h5>Feature-based Localization (coming soon)</h5>
+<p>Given a set of reference images of a scene, the goal is to recover the relative
+pose of a set of query images of the same scene with respect to the reference
+ones. The reference images to construct the 3D of the scene and the query
+images are then registered in the scene.</p>
 <h5>Box detection</h5>
-<p>The performance is measured with the standard detection mAP (numerical results coming
-soon). Meanwhile, here is a image example.</p>
+<p>The detection network is also evaluated independently with the standard
+detection mAP (numerical results coming soon). Current experiments use a
+Faster-RCNN architecture with a Resnet50 backbone.  Meanwhile, here is a image
+example.</p>
 <p align="center">
 <img width="784" src="/images/box_matching/reichstag_box.jpg">
 </p>
