@@ -83,6 +83,11 @@ An example of semantic boxes on the Phototourism dataset and four putative box m
 
 <h4>Updates:</h4>
 <ul>
+<li>2020-05-15: Update stereo-matching metrics plot with full sacre-coeur
+  results. The box matching is being improved to reduce the number of putative
+  box matches that causes major latency by adding constraints on the boxes'
+  geometric layout (e.g. putative matching boxes should form a simple polygon
+  in both images).</li>
 <li>2020-05-10: first commit</li>
 </ul>
 <h4>TODO:</h4>
@@ -127,7 +132,7 @@ performs the worst.</p>
 </p>
 
 <p align="center">
-mAA computed on the top-100 on the three phototourism validation scenes.
+mAA over images pairs of the three phototourism validation scenes.
 (reichstag and st-peters coming soon)
 </p>
 
