@@ -136,14 +136,14 @@ detection performance as the training and validation images are the same.
 <h4>Updates:</h4>
 <ul>
 <li>
-<p>2020-05-27: Update stereo-matching metrics plot with full st-peters-square.
+<p>2020-05-27: Update stereo-matching metrics plot.
   The coarse homography is estimated from putative box matches based on their
   semantic labels and their visual similarity measured with the HardNet
-  descriptor. At most 2 matches are kept for each box. Window boxes are
+  descriptor. At most 2 matches are kept for each box. Boxes around windows are
   discarded. Degenerate homographies are discarded early in the process.
-  The transformation is estimated from <em>all</em> possible pairs and takes
-  [5,90]s/img (which is still to much). Next step: sample a subset of the
-  hypothesis matches only (prosac).</p>
+  The computational time has been speeded up at the cost of less confidence on
+  the homography (this needs to be quantified). Next step: Identify edge cases
+  for the stereo-matching.</p>
 </li>
 <li>
 <p>2020-05-15: Update stereo-matching metrics plot with full sacre-coeur
@@ -156,7 +156,7 @@ detection performance as the training and validation images are the same.
 </ul>
 <h4>TODO:</h4>
 <ol>
-<li>Speed up the box matching. One way to do so is to reduce the initial set of
+<li><s>Speed up the box matching.</s> One way to do so is to reduce the initial set of
   putative matches or to define a ransac threshold above which the estimated coarse
   image transformation is satisfying.</li>
 <li><s>Integrate visual similarity when sampling putative match.</s>
@@ -165,6 +165,7 @@ detection performance as the training and validation images are the same.
   possible to add a visual similarity constraint between boxes with the same
   label by computing a descriptor over the box and match them only if the
   descriptor distance is below a threshold. Tune this threshold.</li>
+<li>Identify stereo-matching edge cases and solve them.</li>
 <li>Implement the localization evaluation.</li>
 <li>Define the box annotation granularity i.e. to which architectural specificity
   the annotations go down to?</li>
