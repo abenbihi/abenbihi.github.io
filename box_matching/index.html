@@ -81,42 +81,6 @@ similarity in an N-to-N fashion. </p>
 An example of semantic boxes on the Phototourism dataset and four putative box matches.
 </p>
 
-<h4>Updates:</h4>
-<ul>
-<li>
-<p>2020-05-27: Update stereo-matching metrics plot with full st-peters-square.
-  The coarse homography is estimated from putative box matches based on their
-  semantic labels and their visual similarity measured with the HardNet
-  descriptor. At most 2 matches are kept for each box. Window boxes are
-  discarded. Degenerate homographies are discarded early in the process.
-  The transformation is estimated from <em>all</em> possible pairs and takes
-  [5,90]s/img (which is still to much). Next step: sample a subset of the
-  hypothesis matches only (prosac).</p>
-</li>
-<li>
-<p>2020-05-15: Update stereo-matching metrics plot with full sacre-coeur
-  results. The box matching is being improved to reduce the number of putative
-  box matches that causes major latency by adding constraints on the boxes'
-  geometric layout (e.g. putative matching boxes should form a simple polygon
-  in both images).</p>
-</li>
-<li>2020-05-10: first commit</li>
-</ul>
-<h4>TODO:</h4>
-<ol>
-<li>Speed up the box matching. One way to do so is to reduce the initial set of
-  putative matches or to define a ransac threshold above which the estimated coarse
-  image transformation is satisfying.</li>
-<li>Refine the putative box matching: currently, boxes are matched based on their
-  semantic consistency only which leads to a high number of matches. It is
-  possible to add a visual similarity constraint between boxes with the same
-  label by computing a descriptor over the box and match them only if the
-  descriptor distance is below a threshold. Tune this threshold.</li>
-<li>Implement the localization evaluation.</li>
-<li>Define the box annotation granularity i.e. to which architectural specificity
-  the annotations go down to?</li>
-<li>Manually annotate the boxes.</li>
-</ol>
 <h4>Results</h4>
 <p>Experiments aim at showing the benefits of the two-stages matching against a
 naive matching for stereo-matching and localization. Current results are
@@ -169,6 +133,43 @@ illustrates that such training can converge and can not be used to assess the
 detection performance as the training and validation images are the same.
 </p>
 
+<h4>Updates:</h4>
+<ul>
+<li>
+<p>2020-05-27: Update stereo-matching metrics plot with full st-peters-square.
+  The coarse homography is estimated from putative box matches based on their
+  semantic labels and their visual similarity measured with the HardNet
+  descriptor. At most 2 matches are kept for each box. Window boxes are
+  discarded. Degenerate homographies are discarded early in the process.
+  The transformation is estimated from <em>all</em> possible pairs and takes
+  [5,90]s/img (which is still to much). Next step: sample a subset of the
+  hypothesis matches only (prosac).</p>
+</li>
+<li>
+<p>2020-05-15: Update stereo-matching metrics plot with full sacre-coeur
+  results. The box matching is being improved to reduce the number of putative
+  box matches that causes major latency by adding constraints on the boxes'
+  geometric layout (e.g. putative matching boxes should form a simple polygon
+  in both images).</p>
+</li>
+<li>2020-05-10: first commit</li>
+</ul>
+<h4>TODO:</h4>
+<ol>
+<li>Speed up the box matching. One way to do so is to reduce the initial set of
+  putative matches or to define a ransac threshold above which the estimated coarse
+  image transformation is satisfying.</li>
+<li><s>Integrate visual similarity when sampling putative match.</s>
+  Refine the putative box matching: currently, boxes are matched based on their
+  semantic consistency only which leads to a high number of matches. It is
+  possible to add a visual similarity constraint between boxes with the same
+  label by computing a descriptor over the box and match them only if the
+  descriptor distance is below a threshold. Tune this threshold.</li>
+<li>Implement the localization evaluation.</li>
+<li>Define the box annotation granularity i.e. to which architectural specificity
+  the annotations go down to?</li>
+<li>Manually annotate the boxes.</li>
+</ol>
 <!--#### Setup
 
 #### Dataset
