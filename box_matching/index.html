@@ -39,7 +39,7 @@ ul.pub li.venue a {text-decoration: none}
 :target {display: block; position: relative; top: -120px; visibility: hidden;}
         </style>
 
-        <meta name="description" content="I match boxes on the sacre coeur." />
+        <meta name="description" content="Finding local correspondences among cluttered scenes requires identifying the image's regions to match. Current approaches based on saliency or..." />
 </head>
 
 
@@ -52,7 +52,7 @@ ul.pub li.venue a {text-decoration: none}
         <div class="media">
           <div class="media-body">
             <center><h1 class="sticky-top" style="color:#4285F4;">
-                Box Matching</h5></center>
+                Box Matching</h1></center>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@ taking advantage of the dense although incomplete 3d information of the
 dataset. These labels are used to train an existing object detector (Faster
 R-CNN). In parallel, the region matching is developed using the manual
 annotation first. Regions are matched according to their semantics and visual
-similarity in an N-to-N fashion. </p>
+similarity in an N-to-N fashion.</p>
 <p align="center">
 <img width="1024" src="/images/box_matching/selected_match.png">
 </p>
@@ -86,7 +86,7 @@ An example of semantic boxes on the Phototourism dataset and four putative box m
 naive matching for stereo-matching and localization. Current results are
 computed on the validation set of the phototourism dataset with manual box
 annotations. This will be updated to integrate the trained box detector.</p>
-<h5>Stereo-matching</h5>
+<h5>Stereo Matching</h5>
 <p>Given a pair of images of the same scenes, the goal is to recover the camera
 displacement.</p>
 <p>I measure the accuracy of the camera displacement between image pairs of the
@@ -96,7 +96,7 @@ Given a set of angular error thresholds, I measure the ratio of image pairs for
 which the estimated displacement error falls below each threshold. The area
 under this curve is called the mean Average Accuracy (mAA). The set of local
 features is fixed (upright-SIFT) and I compare the mAA between a naive matching and
-a box-constrained matching. </p>
+a box-constrained matching.</p>
 <p>For one scene, the list of image pairs is the same as in the image-matching
 challenge: image pairs are selected with various co-visibility i.e. the amount
 of common structures in each image. The current plots are computed only on a
@@ -121,11 +121,10 @@ images are then registered in the scene.</p>
 <p>The detection network is also evaluated independently with the standard
 detection mAP (numerical results coming soon). Current experiments use a
 Faster-RCNN architecture with a Resnet50 backbone.  Meanwhile, here is an image
-example.</p>
+example.
 <p align="center">
 <img width="784" src="/images/box_matching/reichstag_box.jpg">
-</p>
-
+</p></p>
 <p align="center">
 Qualitative results on the box detection network. Faster-RCNN with resnet50
 backbone is trained on the reichstag scene. This image only
@@ -133,26 +132,48 @@ illustrates that such training can converge and can not be used to assess the
 detection performance as the training and validation images are the same.
 </p>
 
+<h5>Data Annotation</h5>
+<h6>Method</h6>
+<p>Manual box annotations are collected over a subset of images depicting the same
+scene with different viewpoints. The rest of the images are annotated by
+projecting the manual annotations from the previous images using the image pose
+and depth. The projection is run only between image pairs with similar
+viewpoints to limit the effects of the depth noise. Given a reference image
+with manual box annotations and a new image to annotate, the projection is
+performed as follow: all the non-occluded pixels inside the manual box are
+projected to the new image. The new box is the minimum enclosing box over the
+projected points.</p>
+<p align="center">
+<img width="1100" src="/images/box_matching/box_annotation.png">
+</p>
+
+<p align="center">
+Box annotation improvement. Left: Naive projection. The corners of the manual
+boxes are projected to the new image. This can result in loose boxes and ignore
+occlusions.
+Right: Improved projection. All the points inside a box are projected to the
+second image and the resulting box is the minimum enclosing box over the
+majority of projected points.
+</p>
+
 <h4>Updates:</h4>
 <ul>
-<li>
-<p>2020-05-27: Update stereo-matching metrics plot.
+<li>2020-06-12: Update box annotation propagation to make them tighter around the
+  object of interest and to take into account the occlusion.</li>
+<li>2020-05-27: Update stereo-matching metrics plot.
   The coarse homography is estimated from putative box matches based on their
   semantic labels and their visual similarity measured with the HardNet
   descriptor. At most 2 matches are kept for each box. Boxes around windows are
   discarded. Degenerate homographies are discarded early in the process.
   The computational time has been speeded up at the cost of less confidence on
   the homography (this needs to be quantified). Next step: Identify edge cases
-  for the stereo-matching.</p>
-</li>
-<li>
-<p>2020-05-15: Update stereo-matching metrics plot with full sacre-coeur
+  for the stereo-matching.</p></li>
+<li>2020-05-15: Update stereo-matching metrics plot with full sacre-coeur
   results. The box matching is being improved to reduce the number of putative
   box matches that causes major latency by adding constraints on the boxes'
   geometric layout (e.g. putative matching boxes should form a simple polygon
-  in both images).</p>
-</li>
-<li>2020-05-10: first commit</li>
+  in both images).</p></li>
+<li>2020-05-10: first commit</li></li>
 </ul>
 <h4>TODO:</h4>
 <ol>
@@ -169,7 +190,7 @@ detection performance as the training and validation images are the same.
 <li>Implement the localization evaluation.</li>
 <li>Define the box annotation granularity i.e. to which architectural specificity
   the annotations go down to?</li>
-<li>Manually annotate the boxes.</li>
+<li>Manually annotate the boxes</li>
 </ol>
 <!--#### Setup
 
