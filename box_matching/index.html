@@ -127,9 +127,36 @@ example.
 </p></p>
 <p align="center">
 Qualitative results on the box detection network. Faster-RCNN with resnet50
-backbone is trained on the reichstag scene. This image only
+backbone is trained on the reichstag scene only. This image only
 illustrates that such training can converge and can not be used to assess the
 detection performance as the training and validation images are the same.
+</p>
+
+<p align="center">
+<img width="328" src="/images/box_matching/600.png">
+<img width="600" src="/images/box_matching/500.png">
+</p>
+
+<p align="center">
+Qualitative results on the box detection network. Faster-RCNN with resnet50
+backbone is trained on almost all the PhotoTourism scenes (
+brandenburg_gate
+buckingham_palace
+notre_dame_front_facade
+pantheon_exterior
+taj_mahal
+trevi_fountain
+westminster_abbey
+reichstag
+sacrecoeur
+st_peters_square)
+The training and validation sets are made of different images but they depict
+the same scene. Such a split is useful to made the network overfit before the
+training and evaluation of the final data.
+
+The images show that the network can indeed converge (even on small objects).
+Now, it must be better tuned and fed more data to increase the performances.
+(For bigger images, contact me.)
 </p>
 
 <h5>Data Annotation</h5>
@@ -158,6 +185,10 @@ majority of projected points.
 
 <h4>Updates:</h4>
 <ul>
+<li>2020-07-01: Phototourism annotation completed. Box detection trained on
+  overfitting data runs correctly. Overfitting data is made of a valiation set
+  with images different from the training ones but that depict the same scene as the
+  training images. Quantitative metrics code is ok.</li>
 <li>2020-06-12: Update box annotation propagation to make them tighter around the
   object of interest and to take into account the occlusion.</li>
 <li>2020-05-27: Update stereo-matching metrics plot.
