@@ -185,6 +185,10 @@ majority of projected points.
 
 <h4>Updates:</h4>
 <ul>
+<li>2020-07-17: SfM annotation ongoing. Scenes from the same landmarks have been
+  isolated to avoid redundant annotation. There are approximately 1500 landmarks.
+  Their usability depends on the quality of the 3D points cloud (this is being
+  assessed). The pipeline is updated daily for any new edge case. </li>
 <li>2020-07-01: Phototourism annotation completed. Box detection trained on
   overfitting data runs correctly. Overfitting data is made of a valiation set
   with images different from the training ones but that depict the same scene as the
@@ -217,12 +221,122 @@ majority of projected points.
   possible to add a visual similarity constraint between boxes with the same
   label by computing a descriptor over the box and match them only if the
   descriptor distance is below a threshold. Tune this threshold.</li>
-<li>Identify stereo-matching edge cases and solve them.</li>
-<li>Implement the localization evaluation.</li>
+<li>Manually annotate the boxes</li>
 <li>Define the box annotation granularity i.e. to which architectural specificity
   the annotations go down to?</li>
-<li>Manually annotate the boxes</li>
+<li>Identify stereo-matching edge cases and solve them.</li>
+<li>Implement the localization evaluation.</li>
 </ol>
+<h4>The never ending annotation</h4>
+<p align="center">
+<img width="1100" src="/images/box_matching/box_semantic_stats.png">
+</p>
+
+<p align="center">
+Semantic classes distribution. Left: Image distribution per scene. Right: Box
+label distribution (only a subset of the labels is currently used for training
+although more box labels are being annotated). 
+Obvisouly, windows are overly-represented (to my utter despair).
+</p>
+
+<h5>Detailed label distribution per scene (simple label list)</h5>
+<p>This is useful to know how to pick the scenes to balance the box label
+distribution. (And yes, I know the table is ugly but I can not get the mtf css
+to do what I want.)</p>
+<p>
+<div class="bs-component">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th></th>
+            <th> Scene                            </th>
+            <th> Desc.                            </th>
+            <th> # of images  </th>
+            <th> window       </th>
+            <th> statue       </th>
+            <th> tour         </th>
+            <th> door         </th>
+            <th> dome         </th>
+            <th> frontont     </th>
+            <th> horloge      </th>
+            <th> balcony      </th>
+            <th> rosace       </th>
+            <th> pillar       </th>
+            <th></p></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><p></td>
+                <td> casa_mila-17217-0                </td>
+                <td> Facade.                          </td>
+                <td> 1639         </td>
+                <td> 21108        </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 8135         </td>
+                <td> 0            </td>
+                <td> 1936         </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> casa_baltllo-8296-1              </td>
+                <td> Facade.                          </td>
+                <td> 250          </td>
+                <td> 374          </td>
+                <td> 0            </td>
+                <td> 12           </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 560          </td>
+                <td> 0            </td>
+                <td> 6            </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> paris_opera-13418-0              </td>
+                <td> Facade.                          </td>
+                <td> 214          </td>
+                <td> 0            </td>
+                <td> 278          </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 364          </td>
+                <td> 0            </td>
+                <td> 1248         </td>
+                <td> 0            </td>
+                <td> 671          </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> versailles-16576-0               </td>
+                <td> Garden facade.                   </td>
+                <td>              </td>
+                <td>              </td>
+                <td>              </td>
+                <td>              </td>
+                <td>              </td>
+                <td>              </td>
+                <td>              </td>
+                <td>              </td>
+                <td>              </td>
+                <td>              </td>
+                <td>              </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div></p>
 <!--#### Setup
 
 #### Dataset
