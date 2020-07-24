@@ -39,7 +39,7 @@ ul.pub li.venue a {text-decoration: none}
 :target {display: block; position: relative; top: -120px; visibility: hidden;}
         </style>
 
-        <meta name="description" content="Updates: 2020-07-24: Integration of useful classes/images from the OpenImage dataset (clocks, windows, door, sculptures, fountain). Qualitative..." />
+        <meta name="description" content="Updates: 2020-07-24: Fig3: Integration of useful classes/images from the OpenImage dataset (clocks, windows, door, sculptures, fountain). Window..." />
 </head>
 
 
@@ -61,9 +61,8 @@ ul.pub li.venue a {text-decoration: none}
     <div class="entry-content">
       <h4>Updates:</h4>
 <ul>
-<li><strong>2020-07-24</strong>: Integration of useful classes/images from the OpenImage dataset (clocks, windows, door, sculptures,
-fountain). Qualitative results seem reasonable (Fig.3) but the mAP is still awfully low
-which suggests a bug in my metric code currently under investigation.</li>
+<li><strong>2020-07-24</strong>: Fig3: Integration of useful classes/images from the OpenImage dataset (clocks, windows, door, sculptures,
+fountain). Window detection seems fine but I do not know how to interepret the numerical performance.</li>
 <li>2020-07-17: SfM annotation ongoing. Scenes from the same landmarks have been
   isolated to avoid redundant annotation. There are approximately 1500 landmarks.
   Their usability depends on the quality of the 3D points cloud (this is being
@@ -165,10 +164,288 @@ mAA over images pairs of the three phototourism validation scenes.
 pose of a set of query images of the same scene with respect to the reference
 ones. The reference images to construct the 3D of the scene and the query
 images are then registered in the scene.</p>
-<h5>Box detection</h5>
-<p>The detection network is also evaluated independently with the standard
-detection mAP (numerical results coming soon). Current experiments use a
-Faster-RCNN architecture with a Resnet50 backbone.</p>
+<h4>Box detection</h4>
+<h5>Quantitative results</h5>
+<ul>
+<li>
+<p>Model: Faster R-CNN with Resnet50 backbone</p>
+</li>
+<li>
+<p>Training data: A subset of Open Image dataset with the labels listed above.
+  Number of images: 39000</p>
+</li>
+<li>Labels: window, door, statue, fountain, clock</li>
+<li>
+<p>Validation data: A subset of the Phototourism validation scenes (st peters
+  square, sacre coeur, reichstag). Groundtruth annotations are collected
+  manually. Number of images: 1155.</p>
+</li>
+<li>
+<p>Metrics: mAP, recall (explicit definition to come once I finally get them)</p>
+</li>
+<li>
+<p>Interpretation: No fucking idea.</p>
+</li>
+<li>
+<p>Metric parameters: maximum number of detections: 100</p>
+</li>
+<li>Max number of detections: 100</li>
+<li>Train model: 205</li>
+<li>Train step: 60000</li>
+</ul>
+<p align="center">
+Metrics over all validation scenes (st peters square, sacre coeur, reichstag)
+</p>
+
+<p>
+<div class="bs-component">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th></th>
+            <th> Metric                </th>
+            <th> Window  </th>
+            <th> Door  </th>
+            <th> Statue  </th>
+            <th> Clock </th>
+            <th> Fountain  </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td> mAP@.50               </td>
+                <td> 22.4    </td>
+                <td> 29.0  </td>
+                <td>  0.7    </td>
+                <td>  0    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> mAP@.75               </td>
+                <td> 2.1     </td>
+                <td> 1.2   </td>
+                <td>  0.0    </td>
+                <td>  0    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> mAP@0.50:0.95         </td>
+                <td> 7.1     </td>
+                <td> 7.5   </td>
+                <td>  0.1    </td>
+                <td>  0    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> Recall@IoU=0.50:0.95  </td>
+                <td> 20.4    </td>
+                <td> 25.7  </td>
+                <td>   5     </td>
+                <td>  0    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div></p>
+<p align="center">
+St Peters Square Metrics
+</p>
+
+<p>
+<div class="bs-component">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th></th>
+            <th> Metric                </th>
+            <th> Window  </th>
+            <th> Door  </th>
+            <th> Statue  </th>
+            <th> Clock </th>
+            <th> Fountain  </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td> mAP@.50               </td>
+                <td> 29.4    </td>
+                <td> 36.2  </td>
+                <td>   0.5   </td>
+                <td>  NA   </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> mAP@.75               </td>
+                <td> 2.2     </td>
+                <td> 1.6   </td>
+                <td>   0     </td>
+                <td>  NA   </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> mAP@0.50:0.95         </td>
+                <td> 9.3     </td>
+                <td> 9.5   </td>
+                <td>   0.1   </td>
+                <td>  NA   </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> Recall@IoU=0.50:0.95  </td>
+                <td> 23.7    </td>
+                <td> 25.9  </td>
+                <td>   1.6   </td>
+                <td>  NA   </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div></p>
+<p align="center">
+Sacre Coeur Metrics
+</p>
+
+<p>
+<div class="bs-component">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th></th>
+            <th> Metric                </th>
+            <th> Window  </th>
+            <th> Door  </th>
+            <th> Statue  </th>
+            <th> Clock </th>
+            <th> Fountain  </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td> mAP@.50               </td>
+                <td>  13.1   </td>
+                <td>  NA   </td>
+                <td>  2.0    </td>
+                <td>   NA    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> mAP@.75               </td>
+                <td>  1.5    </td>
+                <td>  NA   </td>
+                <td>  0      </td>
+                <td>   NA    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> mAP@0.50:0.95         </td>
+                <td>  4.0    </td>
+                <td>  NA   </td>
+                <td>  0.4    </td>
+                <td>   NA    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> Recall@IoU=0.50:0.95  </td>
+                <td>  15.9   </td>
+                <td>  NA   </td>
+                <td>  16.6   </td>
+                <td>   NA    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div></p>
+<p align="center">
+Reichstag Metrics
+</p>
+
+<p>
+<div class="bs-component">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th></th>
+            <th> Metric                </th>
+            <th> Window  </th>
+            <th> Door  </th>
+            <th> Statue  </th>
+            <th> Clock </th>
+            <th> Fountain  </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td> mAP@.50               </td>
+                <td>  20.2   </td>
+                <td> NA    </td>
+                <td>   NA   </td>
+                <td>   NA    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> mAP@.75               </td>
+                <td>  2.0    </td>
+                <td> NA    </td>
+                <td>   NA   </td>
+                <td>   NA    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> mAP@0.50:0.95         </td>
+                <td>  6.3    </td>
+                <td> NA    </td>
+                <td>   NA   </td>
+                <td>   NA    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> Recall@IoU=0.50:0.95  </td>
+                <td>  15.7   </td>
+                <td> NA    </td>
+                <td>   NA   </td>
+                <td>   NA    </td>
+                <td> NA        </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div></p>
+<h5>Qualitative results</h5>
 <p align="center">
 <img width="784" src="/images/box_matching/99368623_945839111.png">
 </p>
