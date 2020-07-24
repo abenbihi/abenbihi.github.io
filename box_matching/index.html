@@ -39,7 +39,7 @@ ul.pub li.venue a {text-decoration: none}
 :target {display: block; position: relative; top: -120px; visibility: hidden;}
         </style>
 
-        <meta name="description" content="Finding local correspondences among cluttered scenes requires identifying the image's regions to match. Current approaches based on saliency or..." />
+        <meta name="description" content="Updates: 2020-07-24: Integration of useful classes/images from the OpenImage dataset (clocks, windows, door, sculptures, fountain). Qualitative..." />
 </head>
 
 
@@ -59,7 +59,55 @@ ul.pub li.venue a {text-decoration: none}
     </div>
 
     <div class="entry-content">
-      <p>Finding local correspondences among cluttered scenes requires identifying the
+      <h4>Updates:</h4>
+<ul>
+<li><strong>2020-07-24</strong>: Integration of useful classes/images from the OpenImage dataset (clocks, windows, door, sculptures,
+fountain). Qualitative results seem reasonable (Fig.3) but the mAP is still awfully low
+which suggests a bug in my metric code currently under investigation.</li>
+<li>2020-07-17: SfM annotation ongoing. Scenes from the same landmarks have been
+  isolated to avoid redundant annotation. There are approximately 1500 landmarks.
+  Their usability depends on the quality of the 3D points cloud (this is being
+  assessed). The pipeline is updated daily for any new edge case. </li>
+<li>2020-07-01: Phototourism annotation completed. Box detection trained on
+  overfitting data runs correctly. Overfitting data is made of a valiation set
+  with images different from the training ones but that depict the same scene as the
+  training images. Quantitative metrics code is ok.</li>
+<li>2020-06-12: Update box annotation propagation to make them tighter around the
+  object of interest and to take into account the occlusion.</li>
+<li>2020-05-27: Update stereo-matching metrics plot.
+  The coarse homography is estimated from putative box matches based on their
+  semantic labels and their visual similarity measured with the HardNet
+  descriptor. At most 2 matches are kept for each box. Boxes around windows are
+  discarded. Degenerate homographies are discarded early in the process.
+  The computational time has been speeded up at the cost of less confidence on
+  the homography (this needs to be quantified). Next step: Identify edge cases
+  for the stereo-matching.</p></li>
+<li>2020-05-15: Update stereo-matching metrics plot with full sacre-coeur
+  results. The box matching is being improved to reduce the number of putative
+  box matches that causes major latency by adding constraints on the boxes'
+  geometric layout (e.g. putative matching boxes should form a simple polygon
+  in both images).</p></li>
+<li>2020-05-10: first commit</li></li>
+</ul>
+<h4>TODO:</h4>
+<ol>
+<li><s>Speed up the box matching.</s> One way to do so is to reduce the initial set of
+  putative matches or to define a ransac threshold above which the estimated coarse
+  image transformation is satisfying.</li>
+<li><s>Integrate visual similarity when sampling putative match.</s>
+  Refine the putative box matching: currently, boxes are matched based on their
+  semantic consistency only which leads to a high number of matches. It is
+  possible to add a visual similarity constraint between boxes with the same
+  label by computing a descriptor over the box and match them only if the
+  descriptor distance is below a threshold. Tune this threshold.</li>
+<li>Debug the metric code.</li>
+<li>Manually annotate the boxes</li>
+<li>Define the box annotation granularity i.e. to which architectural specificity
+  the annotations go down to?</li>
+<li>Identify stereo-matching edge cases and solve them.</li>
+<li>Implement the localization evaluation.</li>
+</ol>
+<p>Finding local correspondences among cluttered scenes requires identifying the
 image's regions to match. Current approaches based on saliency or semantics
 provide only coarse and few such regions per image. I propose to identify
 regions to match at a finer level, for example at the level of an object.
@@ -120,16 +168,16 @@ images are then registered in the scene.</p>
 <h5>Box detection</h5>
 <p>The detection network is also evaluated independently with the standard
 detection mAP (numerical results coming soon). Current experiments use a
-Faster-RCNN architecture with a Resnet50 backbone.  Meanwhile, here is an image
-example.
+Faster-RCNN architecture with a Resnet50 backbone.</p>
 <p align="center">
-<img width="784" src="/images/box_matching/reichstag_box.jpg">
-</p></p>
+<img width="784" src="/images/box_matching/99368623_945839111.png">
+</p>
+
 <p align="center">
-Qualitative results on the box detection network. Faster-RCNN with resnet50
-backbone is trained on the reichstag scene only. This image only
-illustrates that such training can converge and can not be used to assess the
-detection performance as the training and validation images are the same.
+Figure 3. Qualitative results on the box detection network. Faster-RCNN with resnet50
+backbone is trained on a subset of the OpenImage dataset (39000 images with 155 342 windows and 10716 doors). 
+The mAP is still awfully low (<2%) which suggests a bug in the code currently
+under investigation.
 </p>
 
 <p align="center">
@@ -183,51 +231,7 @@ second image and the resulting box is the minimum enclosing box over the
 majority of projected points.
 </p>
 
-<h4>Updates:</h4>
-<ul>
-<li>2020-07-17: SfM annotation ongoing. Scenes from the same landmarks have been
-  isolated to avoid redundant annotation. There are approximately 1500 landmarks.
-  Their usability depends on the quality of the 3D points cloud (this is being
-  assessed). The pipeline is updated daily for any new edge case. </li>
-<li>2020-07-01: Phototourism annotation completed. Box detection trained on
-  overfitting data runs correctly. Overfitting data is made of a valiation set
-  with images different from the training ones but that depict the same scene as the
-  training images. Quantitative metrics code is ok.</li>
-<li>2020-06-12: Update box annotation propagation to make them tighter around the
-  object of interest and to take into account the occlusion.</li>
-<li>2020-05-27: Update stereo-matching metrics plot.
-  The coarse homography is estimated from putative box matches based on their
-  semantic labels and their visual similarity measured with the HardNet
-  descriptor. At most 2 matches are kept for each box. Boxes around windows are
-  discarded. Degenerate homographies are discarded early in the process.
-  The computational time has been speeded up at the cost of less confidence on
-  the homography (this needs to be quantified). Next step: Identify edge cases
-  for the stereo-matching.</p></li>
-<li>2020-05-15: Update stereo-matching metrics plot with full sacre-coeur
-  results. The box matching is being improved to reduce the number of putative
-  box matches that causes major latency by adding constraints on the boxes'
-  geometric layout (e.g. putative matching boxes should form a simple polygon
-  in both images).</p></li>
-<li>2020-05-10: first commit</li></li>
-</ul>
-<h4>TODO:</h4>
-<ol>
-<li><s>Speed up the box matching.</s> One way to do so is to reduce the initial set of
-  putative matches or to define a ransac threshold above which the estimated coarse
-  image transformation is satisfying.</li>
-<li><s>Integrate visual similarity when sampling putative match.</s>
-  Refine the putative box matching: currently, boxes are matched based on their
-  semantic consistency only which leads to a high number of matches. It is
-  possible to add a visual similarity constraint between boxes with the same
-  label by computing a descriptor over the box and match them only if the
-  descriptor distance is below a threshold. Tune this threshold.</li>
-<li>Manually annotate the boxes</li>
-<li>Define the box annotation granularity i.e. to which architectural specificity
-  the annotations go down to?</li>
-<li>Identify stereo-matching edge cases and solve them.</li>
-<li>Implement the localization evaluation.</li>
-</ol>
-<h4>The never ending annotation</h4>
+<h4>Stats on the never ending annotation of the SfM dataset</h4>
 <p align="center">
 <img width="1100" src="/images/box_matching/box_semantic_stats.png">
 </p>
@@ -262,25 +266,178 @@ to do what I want.)</p>
             <th> balcony      </th>
             <th> rosace       </th>
             <th> pillar       </th>
-            <th></p></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
             <tr>
-                <td><p></td>
+                <td></td>
+                <td> cmp_facades_base                 </td>
+                <td> Facade                           </td>
+                <td> 378          </td>
+                <td> 12222        </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 398          </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 1118         </td>
+                <td> 0            </td>
+                <td> 4899         </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> cmp_facades_extended             </td>
+                <td> Facade                           </td>
+                <td> 228          </td>
+                <td> 7817         </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 224          </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 753          </td>
+                <td> 0            </td>
+                <td> 2269         </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> brandenburg_gate                 </td>
+                <td> Arch                             </td>
+                <td> 1359         </td>
+                <td> 317          </td>
+                <td> 1181         </td>
+                <td> 0            </td>
+                <td> 285          </td>
+                <td> 0            </td>
+                <td> 448          </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 7492         </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> buckingham_palace                </td>
+                <td> Facade and fountain              </td>
+                <td> 1676         </td>
+                <td> 31172        </td>
+                <td> 1038         </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 2085         </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 5832         </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> notre_dame_front_facade          </td>
+                <td> Facade                           </td>
+                <td> 3752         </td>
+                <td> 22735        </td>
+                <td> 92557        </td>
+                <td> 4623         </td>
+                <td> 6254         </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 9132         </td>
+                <td> 0            </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> pantheon_exterior                </td>
+                <td> Facade                           </td>
+                <td> 1389         </td>
+                <td> 0            </td>
+                <td> 698          </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 1258         </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 7442         </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> taj_mahal                        </td>
+                <td> Facade                           </td>
+                <td> 1312         </td>
+                <td> 7274         </td>
+                <td> 0            </td>
+                <td> 3947         </td>
+                <td> 0            </td>
+                <td> 7661         </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> trevi_fountain                   </td>
+                <td> Facade                           </td>
+                <td> 3191         </td>
+                <td> 18395        </td>
+                <td> 13255        </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 2912         </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 19300        </td>
+                <td> 0            </td>
+                <td> 17517        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> westminster_abbey                </td>
+                <td> Front and Side Facade.           </td>
+                <td> 1058         </td>
+                <td> 5492         </td>
+                <td> 3384         </td>
+                <td> 0            </td>
+                <td> 1756         </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 791          </td>
+                <td> 0            </td>
+                <td> 3886         </td>
+                <td> 7            </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
                 <td> casa_mila-17217-0                </td>
                 <td> Facade.                          </td>
                 <td> 1639         </td>
-                <td> 21108        </td>
+                <td> 10462        </td>
                 <td> 0            </td>
                 <td> 0            </td>
                 <td> 0            </td>
                 <td> 0            </td>
                 <td> 0            </td>
                 <td> 0            </td>
-                <td> 8135         </td>
+                <td> 3900         </td>
                 <td> 0            </td>
-                <td> 1936         </td>
+                <td> 709          </td>
                 <td></td>
             </tr>
             <tr>
@@ -288,16 +445,16 @@ to do what I want.)</p>
                 <td> casa_baltllo-8296-1              </td>
                 <td> Facade.                          </td>
                 <td> 250          </td>
-                <td> 374          </td>
+                <td> 188          </td>
                 <td> 0            </td>
-                <td> 12           </td>
-                <td> 0            </td>
-                <td> 0            </td>
+                <td> 11           </td>
                 <td> 0            </td>
                 <td> 0            </td>
-                <td> 560          </td>
                 <td> 0            </td>
-                <td> 6            </td>
+                <td> 0            </td>
+                <td> 257          </td>
+                <td> 0            </td>
+                <td> 4            </td>
                 <td></td>
             </tr>
             <tr>
@@ -306,15 +463,15 @@ to do what I want.)</p>
                 <td> Facade.                          </td>
                 <td> 214          </td>
                 <td> 0            </td>
-                <td> 278          </td>
+                <td> 178          </td>
                 <td> 0            </td>
                 <td> 0            </td>
                 <td> 0            </td>
-                <td> 364          </td>
+                <td> 224          </td>
                 <td> 0            </td>
-                <td> 1248         </td>
+                <td> 768          </td>
                 <td> 0            </td>
-                <td> 671          </td>
+                <td> 406          </td>
                 <td></td>
             </tr>
             <tr>
@@ -332,6 +489,117 @@ to do what I want.)</p>
                 <td>              </td>
                 <td>              </td>
                 <td>              </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> Total                            </td>
+                <td>                                  </td>
+                <td> 14440        </td>
+                <td> 116074       </td>
+                <td> 112291       </td>
+                <td> 8581         </td>
+                <td> 8917         </td>
+                <td> 10573        </td>
+                <td> 4015         </td>
+                <td> 791          </td>
+                <td> 26096        </td>
+                <td> 13018        </td>
+                <td> 46577        </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div></p>
+<p>
+<div class="bs-component">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th></th>
+            <th> Scene                            </th>
+            <th> Desc.                            </th>
+            <th> # of images  </th>
+            <th> window       </th>
+            <th> statue       </th>
+            <th> tour         </th>
+            <th> door         </th>
+            <th> dome         </th>
+            <th> frontont     </th>
+            <th> horloge      </th>
+            <th> balcony      </th>
+            <th> rosace       </th>
+            <th> pillar       </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td> reichstag                        </td>
+                <td> Facade                           </td>
+                <td> 75           </td>
+                <td> 2013         </td>
+                <td> 269          </td>
+                <td> 720          </td>
+                <td> 0            </td>
+                <td> 72           </td>
+                <td> 71           </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 1117         </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> sacre_coeur                      </td>
+                <td> Facade                           </td>
+                <td> 1174         </td>
+                <td> 8405         </td>
+                <td> 3004         </td>
+                <td> 4053         </td>
+                <td> 100          </td>
+                <td> 2098         </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 0            </td>
+                <td> 338          </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> st_peters_square                 </td>
+                <td> Facade                           </td>
+                <td> 2491         </td>
+                <td> 31226        </td>
+                <td> 23645        </td>
+                <td> 1808         </td>
+                <td> 12250        </td>
+                <td> 1470         </td>
+                <td> 1963         </td>
+                <td> 3497         </td>
+                <td> 5741         </td>
+                <td> 0            </td>
+                <td> 21785        </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> Total                            </td>
+                <td>                                  </td>
+                <td> 3239         </td>
+                <td> 41644        </td>
+                <td> 26918        </td>
+                <td> 6581         </td>
+                <td> 12350        </td>
+                <td> 3640         </td>
+                <td> 2034         </td>
+                <td> 3497         </td>
+                <td> 5741         </td>
+                <td> 0            </td>
+                <td> 23240        </td>
                 <td></td>
             </tr>
         </tbody>
