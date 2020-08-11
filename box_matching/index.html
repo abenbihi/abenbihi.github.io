@@ -39,7 +39,7 @@ ul.pub li.venue a {text-decoration: none}
 :target {display: block; position: relative; top: -120px; visibility: hidden;}
         </style>
 
-        <meta name="description" content="Updates: 2020-07-24: Fig3: Integration of useful classes/images from the OpenImage dataset (clocks, windows, door, sculptures, fountain). Window..." />
+        <meta name="description" content="Updates: 2020-08-07: The RCNN does not converge. When train simulatenously with the RPN, it destroys the RPN weights. When the RPN is fixed, the..." />
 </head>
 
 
@@ -61,8 +61,17 @@ ul.pub li.venue a {text-decoration: none}
     <div class="entry-content">
       <h4>Updates:</h4>
 <ul>
-<li><strong>2020-07-24</strong>: Fig3: Integration of useful classes/images from the OpenImage dataset (clocks, windows, door, sculptures,
-fountain). Window detection seems fine but I do not know how to interepret the numerical performance.</li>
+<li>2020-08-07: The RCNN does not converge. When train simulatenously with the
+  RPN, it destroys the RPN weights. When the RPN is fixed, the RCNN converges
+  to poor performance weights (less than 5% mAP, even on windows). 
+  <strong>I am taking a break from this until next time.</strong></li>
+<li>2020-07-31: RPN (Region Proposal Network) can be trained on the OID dataset
+  that holds mostly windows. The recall-over-IoU metric to evaluate the RPN
+  indicates reasonnable performance (cf Fig 3.) although there is still room for
+  improvement. Next week, I will train the RCNN.</li>
+<li>2020-07-24: Fig4: Integration of useful classes/images from the OpenImage
+  dataset (clocks, windows, door, sculptures, fountain). Window detection seems
+  fine but I do not know how to interepret the numerical performance.</li>
 <li>2020-07-17: SfM annotation ongoing. Scenes from the same landmarks have been
   isolated to avoid redundant annotation. There are approximately 1500 landmarks.
   Their usability depends on the quality of the 3D points cloud (this is being
@@ -184,7 +193,7 @@ images are then registered in the scene.</p>
 <p>Metrics: mAP, recall (explicit definition to come once I finally get them)</p>
 </li>
 <li>
-<p>Interpretation: No fucking idea.</p>
+<p>Interpretation: No idea.</p>
 </li>
 <li>
 <p>Metric parameters: maximum number of detections: 100</p>
@@ -204,6 +213,7 @@ Metrics over all validation scenes (st peters square, sacre coeur, reichstag)
         <tr>
             <th></th>
             <th> Metric                </th>
+            <th> All   </th>
             <th> Window  </th>
             <th> Door  </th>
             <th> Statue  </th>
@@ -216,6 +226,7 @@ Metrics over all validation scenes (st peters square, sacre coeur, reichstag)
             <tr>
                 <td></td>
                 <td> mAP@.50               </td>
+                <td> 10.8  </td>
                 <td> 22.4    </td>
                 <td> 29.0  </td>
                 <td>  0.7    </td>
@@ -226,6 +237,7 @@ Metrics over all validation scenes (st peters square, sacre coeur, reichstag)
             <tr>
                 <td></td>
                 <td> mAP@.75               </td>
+                <td> 0.9   </td>
                 <td> 2.1     </td>
                 <td> 1.2   </td>
                 <td>  0.0    </td>
@@ -236,6 +248,7 @@ Metrics over all validation scenes (st peters square, sacre coeur, reichstag)
             <tr>
                 <td></td>
                 <td> mAP@0.50:0.95         </td>
+                <td> 3.2   </td>
                 <td> 7.1     </td>
                 <td> 7.5   </td>
                 <td>  0.1    </td>
@@ -246,6 +259,7 @@ Metrics over all validation scenes (st peters square, sacre coeur, reichstag)
             <tr>
                 <td></td>
                 <td> Recall@IoU=0.50:0.95  </td>
+                <td> 12.6  </td>
                 <td> 20.4    </td>
                 <td> 25.7  </td>
                 <td>   5     </td>
@@ -445,13 +459,27 @@ Reichstag Metrics
         </tbody>
     </table>
 </div></p>
+<h5>RPN evaluation</h5>
+<p><p align="center">
+<img width="1024" src="/images/box_matching/recall_over_iou.png">
+</p></p>
+<p align="center">
+Figure 3. Quantitative evaluation on the Region Proposal Network. The RPN is
+trained on the OID images and evaluated on the Phototourism evaluation set. The
+curves shows the recall over iou i.e. the ratio of boxes identified as
+foreground objects that overlap with a specific IoU over a groundtruth box.
+Here I plot the curve only after 10 000 training steps (blue) and 100 000
+training steps. The RPN is trained only for up to 100 000 steps for now but the
+curves suggest that it needs more training.
+</p>
+
 <h5>Qualitative results</h5>
 <p align="center">
 <img width="784" src="/images/box_matching/99368623_945839111.png">
 </p>
 
 <p align="center">
-Figure 3. Qualitative results on the box detection network. Faster-RCNN with resnet50
+Figure 4. Qualitative results on the box detection network. Faster-RCNN with resnet50
 backbone is trained on a subset of the OpenImage dataset (39000 images with 155 342 windows and 10716 doors). 
 The mAP is still awfully low (<2%) which suggests a bug in the code currently
 under investigation.
