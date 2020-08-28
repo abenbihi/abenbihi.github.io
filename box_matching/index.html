@@ -39,7 +39,7 @@ ul.pub li.venue a {text-decoration: none}
 :target {display: block; position: relative; top: -120px; visibility: hidden;}
         </style>
 
-        <meta name="description" content="Updates: 2020-08-21: I managed to get a converging model for window detection although there is significant room for improvement on the..." />
+        <meta name="description" content="Updates: 2020-08-28: Integration of the box-guided local feature matches in the feature-based localization pipeline for the Aachen dataset (night..." />
 </head>
 
 
@@ -61,9 +61,18 @@ ul.pub li.venue a {text-decoration: none}
     <div class="entry-content">
       <h4>Updates:</h4>
 <ul>
-<li><strong>2020-08-21</strong>: I managed to get a converging model for window detection although
-  there is significant room for improvement on the performance (see )
-  . I am pausing
+<li>2020-08-28: Integration of the box-guided local feature matches in the
+  feature-based localization pipeline for the Aachen dataset (night queries
+  only for now). I use naively sampled Superpoint points and matches are
+  constrained to be between keypoints belonging to corresponding boxes. The
+  pose accuracy is roughly 40% (vs. 80% for the original SuperPoint). See Fig.3
+  and Fig.4 for quantitative and qualitative results. 
+  Next week, I will improve my pipeline's engineering with better box detection model, box
+  detection post-processing, box matching parameters and local matching
+  engineering. I will start to define the paper outline and the baselines.</li>
+<li>2020-08-21: I managed to get a converging model for window detection although
+  there is significant room for improvement on the performance (see Figure 5).
+  I am pausing
   the box detection training to get the localization pipeline running.</li>
 <li>2020-08-14: I reduced the problem to its 'simplest version' which is window
   detection. I rely on the OpenImage dataset from which I extract all images
@@ -99,12 +108,12 @@ ul.pub li.venue a {text-decoration: none}
   discarded. Degenerate homographies are discarded early in the process.
   The computational time has been speeded up at the cost of less confidence on
   the homography (this needs to be quantified). Next step: Identify edge cases
-  for the stereo-matching.</p></li>
+  for the stereo-matching.</li>
 <li>2020-05-15: Update stereo-matching metrics plot with full sacre-coeur
   results. The box matching is being improved to reduce the number of putative
   box matches that causes major latency by adding constraints on the boxes'
   geometric layout (e.g. putative matching boxes should form a simple polygon
-  in both images).</p></li>
+  in both images).<!--</p>--></li>
 <li>2020-05-10: first commit</li></li>
 </ul>
 <h4>TODO:</h4>
@@ -118,12 +127,14 @@ ul.pub li.venue a {text-decoration: none}
   possible to add a visual similarity constraint between boxes with the same
   label by computing a descriptor over the box and match them only if the
   descriptor distance is below a threshold. Tune this threshold.</li>
-<li>Debug the metric code.</li>
+<li><s>Debug the metric code.</s></li>
 <li>Manually annotate the boxes</li>
 <li>Define the box annotation granularity i.e. to which architectural specificity
   the annotations go down to?</li>
-<li>Identify stereo-matching edge cases and solve them.</li>
-<li>Implement the localization evaluation.</li>
+<li>Identify stereo-matching edge cases and solve them. (Ongoing). Identified
+   edge cases: extreme scale variations, extreme light variations</li>
+<li><s>Implement the localization evaluation.</s></li>
+<li>Automate the localization evaluation.</li>
 </ol>
 <p>Finding local correspondences among cluttered scenes requires identifying the
 image's regions to match. Current approaches based on saliency or semantics
@@ -144,7 +155,7 @@ similarity in an N-to-N fashion.</p>
 </p>
 
 <p align="center">
-An example of semantic boxes on the Phototourism dataset and four putative box matches.
+Fig1. An example of semantic boxes on the Phototourism dataset and four putative box matches.
 </p>
 
 <h4>Results</h4>
@@ -174,15 +185,52 @@ performs the worst.</p>
 </p>
 
 <p align="center">
-mAA over images pairs of the three phototourism validation scenes.
+Fig2. mAA over images pairs of the three phototourism validation scenes.
 (reichstag and st-peters coming soon)
 </p>
 
-<h5>Feature-based Localization (coming soon)</h5>
+<h4>Feature-based Localization</h4>
 <p>Given a set of reference images of a scene, the goal is to recover the relative
 pose of a set of query images of the same scene with respect to the reference
 ones. The reference images to construct the 3D of the scene and the query
 images are then registered in the scene.</p>
+<p><strong>Aachen</strong>
+This table shows the localization accuracy of the box-guided matching of
+existing SuperPoint features (top BM-SP), against the SuperPoint baseline (bottom).
+These metrics are computed through the <a
+href="https://www.visuallocalization.net/benchmark/">visual localization
+benchmark</a>. WARNING: these numerical results are very naive in the sense
+that I do not optimize the keypoint sampling, the box detection, the box
+matching, nor do I use any engineering for the local feature matches. All these
+enhancement will come in the next step.</p>
+<p>My results are computed by naively sampling SuperPoint features
+with the default parameters on a single scale image with no limitation on the
+number of keypoints. Given corresponding boxes between two images, I sample
+keypoints inside these boxes only and match them to keypoints in the associated
+box. I do not verify these matches geometrically. I then integrate the
+keypoints and the previously computed matches into a SfM (COLMAP) pipeline: I
+construct a 3D point cloud from the reference images and then register the
+query image to get their estimated poses. Theses poses are fed to the
+evaluation server.</p>
+<p align="center">
+<img width="1024" src="/images/box_matching/aachen_night_box_matches_sp.png">
+</p>
+
+<p align="center">
+Fig3. Naive numerical results of feature-based localization on the Aachen-night
+dataset with SuperPoint features. Top: local feature matches are constrained
+with window boxes. Bottom: SuperPoint baseline.
+</p>
+
+<p align="center">
+<img width="1024" src="/images/box_matching/aachen_night_box_matches_eg.png">
+</p>
+
+<p align="center">
+Fig4. Qualitative results on the box-constrained matching. Left-Right: success and
+failure cases.
+</p>
+
 <h4>Box detection</h4>
 <h5>Quantitative results (latest)</h5>
 <ul>
@@ -259,7 +307,7 @@ mAP for window detection on OpenImage Dataset.
 <img width="512" src="/images/box_matching/step3_recall_over_iou.png">
 </p></p>
 <p align="center">
-Figure 3. Quantitative evaluation of the box locations. Both the RPN and the
+Figure 5. Quantitative evaluation of the box locations. Both the RPN and the
 RCNN box regression are evaluated with the ratio of groundtruth boxes (recall)
 recovered with IoU higher than a threshold specified by the x-axis.  Note that
 boxes regressed by the RCNN (which is the second stage box regression) provides
@@ -283,7 +331,7 @@ projected points.</p>
 </p>
 
 <p align="center">
-Box annotation improvement. Left: Naive projection. The corners of the manual
+Fig 6.Box annotation improvement. Left: Naive projection. The corners of the manual
 boxes are projected to the new image. This can result in loose boxes and ignore
 occlusions.
 Right: Improved projection. All the points inside a box are projected to the
@@ -297,7 +345,7 @@ majority of projected points.
 </p>
 
 <p align="center">
-Semantic classes distribution. Left: Image distribution per scene. Right: Box
+Fig 7. Semantic classes distribution. Left: Image distribution per scene. Right: Box
 label distribution (only a subset of the labels is currently used for training
 although more box labels are being annotated). 
 Obvisouly, windows are overly-represented (to my utter despair).
