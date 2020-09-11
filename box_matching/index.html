@@ -39,7 +39,7 @@ ul.pub li.venue a {text-decoration: none}
 :target {display: block; position: relative; top: -120px; visibility: hidden;}
         </style>
 
-        <meta name="description" content="Updates: 2020-09-04: A rough outline of the paper has been define with baselines to compare to. Let the numerical results games begin and may the..." />
+        <meta name="description" content="Updates: 2020-09-11: The OID window box detection dataset is finally completly cleaned: there are 9075 images with 126581 boxes which represents..." />
 </head>
 
 
@@ -61,7 +61,15 @@ ul.pub li.venue a {text-decoration: none}
     <div class="entry-content">
       <h4>Updates:</h4>
 <ul>
-<li>2020-09-04: A rough outline of the paper has been define with baselines to
+<li>2020-09-11: The OID window box detection dataset is finally completly
+  cleaned: there are 9075 images with 126581 boxes which represents only 10% of
+  the original data. New training schedules have been tested with the new data:
+  although the detection performance have increased (of roughly 10%), the
+  localization has decreased of roughly 10%. My hypothesis is that the planar
+  assumption used during the coarse transformation estimation is invalid for
+  the Aachen dataset so I am testing new box association algorithms based on
+  graph matching.</li>
+<li>2020-09-04: A rough outline of the paper has been defined with baselines to
   compare to. Let the numerical results games begin and may the odds ever be in my
   favor.</li>
 <li>2020-08-28: Integration of the box-guided local feature matches in the
@@ -216,13 +224,18 @@ construct a 3D point cloud from the reference images and then register the
 query image to get their estimated poses. Theses poses are fed to the
 evaluation server.</p>
 <p align="center">
-<img width="1024" src="/images/box_matching/aachen_night_box_matches_sp.png">
+<img width="1024" src="/images/box_matching/loc_09_11.png">
 </p>
 
 <p align="center">
 Fig3. Naive numerical results of feature-based localization on the Aachen-night
-dataset with SuperPoint features. Top: local feature matches are constrained
-with window boxes. Bottom: SuperPoint baseline.
+dataset with SuperPoint features. Line1: local feature matches are constrained
+with window boxes trained with Schedule 1 on a subset of the dataset. 
+Line2: Box detector trained with schedule 4 on a larger dataset. Bottom: SuperPoint baseline. 
+Even though the window detection performances (line2), the localization
+performance do not follow. I suspect either a bad detection generalization on
+the aachen dataset or that the homography assumption for the coarse
+transformation estimation to be too restrictive.
 </p>
 
 <p align="center">
@@ -273,8 +286,9 @@ mAP for window detection on OpenImage Dataset.
         <tr>
             <th></th>
             <th> Metric                </th>
-            <th> All     </th>
-            <th> </th>
+            <th> 08-21 </th>
+            <th> 09-09 </th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -282,24 +296,28 @@ mAP for window detection on OpenImage Dataset.
                 <td></td>
                 <td> mAP@.50               </td>
                 <td> 65.9  </td>
-                <td> <br></td>
+                <td>   77.4  </td>
+                <td></td>
             </tr>
             <tr>
                 <td></td>
                 <td> mAP@.75               </td>
                 <td> 22.2  </td>
-                <td> </td>
+                <td> 30.3  </td>
+                <td></td>
             </tr>
             <tr>
                 <td></td>
                 <td> mAP@0.50:0.95         </td>
                 <td> 29.9  </td>
-                <td> </td>
+                <td> 37.1  </td>
+                <td></td>
             </tr>
             <tr>
                 <td></td>
                 <td> Recall@IoU=0.50:0.95  </td>
                 <td> 44.2  </td>
+                <td> 49.1  </td>
                 <td></td>
             </tr>
         </tbody>
