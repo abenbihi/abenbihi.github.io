@@ -39,7 +39,7 @@ ul.pub li.venue a {text-decoration: none}
 :target {display: block; position: relative; top: -120px; visibility: hidden;}
         </style>
 
-        <meta name="description" content="Updates: 2020-09-11: The OID window box detection dataset is finally completly cleaned: there are 9075 images with 126581 boxes which represents..." />
+        <meta name="description" content="Updates: 2020-09-18: Local stereo experiments on a subset of the Aachen dataset ongoing. I compare to SuperGlue (the top SoA) and to naive..." />
 </head>
 
 
@@ -61,6 +61,15 @@ ul.pub li.venue a {text-decoration: none}
     <div class="entry-content">
       <h4>Updates:</h4>
 <ul>
+<li>2020-09-18: Local stereo experiments on a subset of the Aachen dataset
+  ongoing. I compare to SuperGlue (the top SoA) and to naive matching.  My
+  method reaches half the performance of SuperGlue in terms of camera pose
+  error. It can be explained by my half-smaller number of inlier matches (see
+  <strong>Fig. 2</strong>).  The best box-guided matching strategy so far is to first estimate
+  an homography from the local feature matches between correponding boxes. This
+  homography is then used to project all keypoints in the first image and match
+  them to neighboring points in the second image. The goal for next week is to
+  beat SuperGlue.</li>
 <li>2020-09-11: The OID window box detection dataset is finally completly
   cleaned: there are 9075 images with 126581 boxes which represents only 10% of
   the original data. New training schedules have been tested with the new data:
@@ -139,13 +148,15 @@ ul.pub li.venue a {text-decoration: none}
   label by computing a descriptor over the box and match them only if the
   descriptor distance is below a threshold. Tune this threshold.</li>
 <li><s>Debug the metric code.</s></li>
-<li>Manually annotate the boxes</li>
+<li>Manually annotate the boxes (for the SfM dataset).</li>
 <li>Define the box annotation granularity i.e. to which architectural specificity
   the annotations go down to?</li>
 <li>Identify stereo-matching edge cases and solve them. (Ongoing). Identified
    edge cases: extreme scale variations, extreme light variations</li>
 <li><s>Implement the localization evaluation.</s></li>
-<li>Automate the localization evaluation.</li>
+<li><s>Automate the localization evaluation.</s> Aachen: OK.</li>
+<li>Beat SuperGlue.</li>
+<li>Compare to yi2018, OANet, DFE, NGRANSAC, SIFTFlow, AdaLam, GMS, SNCNet</li>
 </ol>
 <p>Finding local correspondences among cluttered scenes requires identifying the
 image's regions to match. Current approaches based on saliency or semantics
@@ -174,7 +185,27 @@ Fig1. An example of semantic boxes on the Phototourism dataset and four putative
 naive matching for stereo-matching and localization. Current results are
 computed on the validation set of the phototourism dataset with manual box
 annotations. This will be updated to integrate the trained box detector.</p>
-<h5>Stereo Matching</h5>
+<h5>Stereo Matching - Aachen</h5>
+<p align="center">
+<img width="1024" src="/images/box_matching/aachen_stereo_09_18.png">
+</p>
+
+<p align="center">
+Fig2. Left-Right: Camera pose accuracy for various error threshold ([5,10,20]).
+Precision i.e. the ratio of inlier matches.  Matching score: ratio of inlier
+matches over the number of detected keyopints (on the left img). Dataset: a
+subset of the Aachen day dataset. Methods: SuperGlue (sp), Naive Matching
+(naive) and various box matching strategies (bms). Evaluation: I compare to SuperGlue and naive
+matching. SuperGlue clearly outperforms me (for now only) in term of accuracy
+(left plot). I explain this by their higher inlier matches ratio (high
+precision - middle plot). The best box-guided matching strategy consists in
+first matching the local features between corresponding boxes to estimate an
+homography between the two images. This homography is then used to project all
+keypoints in the first image and match them to neighboring points in the second
+image (black plot).
+</p>
+
+<h5>Stereo Matching - Phototourism (obsoltete)</h5>
 <p>Given a pair of images of the same scenes, the goal is to recover the camera
 displacement.</p>
 <p>I measure the accuracy of the camera displacement between image pairs of the
@@ -196,7 +227,7 @@ performs the worst.</p>
 </p>
 
 <p align="center">
-Fig2. mAA over images pairs of the three phototourism validation scenes.
+Fig (outdated). mAA over images pairs of the three phototourism validation scenes.
 (reichstag and st-peters coming soon)
 </p>
 
